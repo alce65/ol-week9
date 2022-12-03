@@ -1,6 +1,6 @@
-import { Task } from '../../models/task.js';
-import { consoleDebug } from '../../tools/debug.js';
-import { Component } from '../component/component.js';
+import { Task } from '../../../models/task.js';
+import { consoleDebug } from '../../../tools/debug.js';
+import { Component } from '../../component/component.js';
 
 export class Item extends Component {
     constructor(

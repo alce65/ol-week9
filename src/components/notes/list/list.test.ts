@@ -1,10 +1,10 @@
 import { screen } from '@testing-library/dom';
 // adds special assertions like toHaveTextContent
 import '@testing-library/jest-dom';
-import { Task } from '../../models/task';
+import { Note } from '../../../models/note';
 import { List } from './list';
-import * as debug from '../../tools/debug.js';
-import { Add } from '../todo.add/add';
+import * as debug from '../../../tools/debug.js';
+import { Add } from '../add/add';
 
 describe('Given "List" component', () => {
     describe('When it is instantiated with a valid selector', () => {
@@ -13,7 +13,7 @@ describe('Given "List" component', () => {
             <slot name="slot2"></slot>`;
         const list = new List('slot[name="slot1"]');
         const elements = [
-            screen.getByRole('heading', { name: 'Lista de tareas' }), // <h3>
+            screen.getByRole('heading', { name: 'Lista de notas' }), // <h3>
             screen.getByRole('list'), // <ul />
         ];
         test('Then we should to be able to instantiate it', () => {
@@ -42,25 +42,25 @@ describe('Given "List" component', () => {
     });
 
     describe('When its methods are called', () => {
-        const mockTask = new Task('test', 'user');
+        const mockNote = new Note('test', 'user');
         let list: List;
-        let initialTasks;
+        let initialNotes;
         beforeEach(() => {
             list = new List('slot');
-            initialTasks = [...list.tasks];
+            initialNotes = [...list.notes];
         });
-        test('Then if it is call addTask() the tasks array should be returned with a new item', () => {
-            list.addTask(mockTask);
-            expect(list.tasks.length).toBe(initialTasks.length + 1);
+        test('Then if it is call addNote() the notes array should be returned with a new item', () => {
+            list.addNote(mockNote);
+            expect(list.notes.length).toBe(initialNotes.length + 1);
         });
-        test('Then if it is call updateTask() the tasks array should be returned with a updated item', () => {
+        test('Then if it is call updateNote() the notes array should be returned with a updated item', () => {
             const title = 'Updated title';
-            list.updateTask(list.tasks[0].id, { title });
-            expect(list.tasks[0].title).toBe(title);
+            list.updateNote(list.notes[0].id, { title });
+            expect(list.notes[0].title).toBe(title);
         });
-        test('Then if ts call deleteTask() the tasks array should be returned without the deleted item', () => {
-            list.deleteTask(list.tasks[0].id);
-            expect(list.tasks.length).toBe(initialTasks.length - 1);
+        test('Then if ts call deleteNote() the notes array should be returned without the deleted item', () => {
+            list.deleteNote(list.notes[0].id);
+            expect(list.notes.length).toBe(initialNotes.length - 1);
         });
     });
 });

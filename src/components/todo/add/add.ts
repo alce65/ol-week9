@@ -1,5 +1,5 @@
-import { Task } from '../../models/task.js';
-import { Component } from '../component/component.js';
+import { Task } from '../../../models/task.js';
+import { Component } from '../../component/component.js';
 
 type DataFormType = {
     title: string;

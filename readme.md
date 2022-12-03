@@ -6,4 +6,11 @@
 
 ## Día 2
 
+Asincronía
+
+-   mono-hilo (One Thread)
+-   paralelismo v. concurrencia (JS)
+
+-   2 camarero
+
 ## Día 3

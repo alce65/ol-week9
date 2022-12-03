@@ -21,8 +21,10 @@
         "@babel/plugin-transform-modules-commonjs": "^7.19.6",
         "@testing-library/dom": "^8.19.0",
         "@testing-library/jest-dom": "^5.16.5",
+        "@testing-library/user-event": "^14.4.3",
         "@types/jest": "^29.2.2",
         "@types/node": "^18.11.9",
+        "@types/testing-library__dom": "^7.5.0",
         "@typescript-eslint/eslint-plugin": "^5.42.1",
         "@typescript-eslint/parser": "^5.42.1",
         "eslint": "^8.26.0",
@@ -42,9 +44,5 @@
                 ]
             }
         }
-    },
-    "dependencies": {
-        "@testing-library/user-event": "^14.4.3",
-        "@types/testing-library__dom": "^7.5.0"
     }
 }

@@ -1,8 +1,8 @@
 import { Component } from '../../components/component/component.js';
-import { List } from '../../components/todo/list/list.js';
+import { List } from '../../components/notes/list/list.js';
 import { consoleDebug } from '../../tools/debug.js';
 
-export class TodoPage extends Component {
+export class NotesPage extends Component {
     constructor(private selector: string) {
         super();
         this.template = this.createTemplate();
@@ -21,7 +21,7 @@ export class TodoPage extends Component {
     private createTemplate() {
         return `
         <main>
-            <h2>Tareas</h2>
+            <h2>Notas</h2>
             <div class="todo-wrapper"></div>
         </main>
         `;

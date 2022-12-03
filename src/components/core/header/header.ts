@@ -1,4 +1,4 @@
-import { Component } from '../component/component.js';
+import { Component } from '../../component/component.js';
 
 export class Header extends Component {
     constructor(private selector: string) {

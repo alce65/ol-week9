@@ -1,5 +1,5 @@
-import { MenuOptionsType } from '../../types/menu.options.js';
-import { Component } from '../component/component.js';
+import { MenuOptionsType } from '../../../types/menu.options.js';
+import { Component } from '../../component/component.js';
 
 export class Menu extends Component {
     constructor(

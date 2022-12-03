@@ -2,18 +2,18 @@ import { screen } from '@testing-library/dom';
 // adds special assertions like toHaveTextContent
 import '@testing-library/jest-dom';
 import userEvent from '@testing-library/user-event';
-import { Task } from '../../models/task';
+import { Note } from '../../../models/note';
 import { Item } from './item';
 
 describe('Given "Item" component', () => {
     document.body.innerHTML = `<slot></slot>`;
-    const updateTask = jest.fn();
-    const deleteTask = jest.fn();
-    const mockTitle = 'Test task';
+    const updateNote = jest.fn();
+    const deleteNote = jest.fn();
+    const mockTitle = 'Test note';
     const mockUser = 'Test user';
-    const newTask = new Task(mockTitle, mockUser);
-    newTask.isCompleted = true;
-    const itemTask = new Item('slot', newTask, updateTask, deleteTask);
+    const newNote = new Note(mockTitle, mockUser);
+    newNote.isImportant = true;
+    const itemNote = new Item('slot', newNote, updateNote, deleteNote);
     const elements = [
         screen.getByRole('listitem'), // <li />
         screen.getByRole('checkbox'),
@@ -21,7 +21,7 @@ describe('Given "Item" component', () => {
         screen.getByRole('button'),
     ];
     test('Then we should to be able to instantiate it', () => {
-        expect(itemTask).toBeInstanceOf(Item);
+        expect(itemNote).toBeInstanceOf(Item);
     });
     describe.each(elements)(
         'When it is call with a DOM implementation',
@@ -38,9 +38,9 @@ describe('Given "Item" component', () => {
             expect(elements[2]).toHaveValue(mockTitle);
             expect(elements[3]).toHaveValue(mockUser);
             await user.click(elements[1]);
-            expect(updateTask).toHaveBeenCalledTimes(1);
+            expect(updateNote).toHaveBeenCalledTimes(1);
             await user.click(elements[4]);
-            expect(deleteTask).toHaveBeenCalledTimes(1);
+            expect(deleteNote).toHaveBeenCalledTimes(1);
         });
     });
 });
