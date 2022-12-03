@@ -1,5 +1,6 @@
 import { initializeNotes } from '../../../mocks/notes.js';
 import { Note } from '../../../models/note.js';
+import { NotesRepo } from '../../../repository/notes.repo.js';
 import { StoreArray } from '../../../services/storage.js';
 import { consoleDebug } from '../../../tools/debug.js';
 import { Component } from '../../component/component.js';
@@ -8,11 +9,12 @@ import { Item } from '../item/item.js';
 
 export class List extends Component {
     notes: Array<Note>;
-    srvStore = new StoreArray<Note>('Notes');
+    repo = new NotesRepo();
     constructor(private selector: string) {
         super();
-        this.notes = this.loadNotes();
+        this.notes = [];
         this.manageComponent();
+        this.loadNotes();
     }
 
     manageComponent() {
@@ -40,31 +42,30 @@ export class List extends Component {
         return super.innRender(this.selector);
     }
 
-    loadNotes() {
-        let result = this.srvStore.getStore();
-        if (!result.length) result = initializeNotes();
-        this.srvStore.setStore(result);
-        return result;
+    async loadNotes() {
+        this.notes = await this.repo.load();
+        this.manageComponent();
+        return this.notes;
     }
 
-    addNote(note: Note) {
-        // Mutando el array this.notes.push(note)
-        this.notes = [...this.notes, note];
-        this.srvStore.setStore(this.notes);
+    async addNote(note: Partial<Note>) {
+        const finalNote: Note = await this.repo.create(note);
+        this.notes = [...this.notes, finalNote];
         this.manageComponent();
         return this.notes;
     }
-    updateNote(id: string, data: Partial<Note>) {
+    async updateNote(id: string, data: Partial<Note>) {
+        data.id = id;
+        const finalNote = await this.repo.update(data);
         this.notes = this.notes.map((item) =>
-            item.id === id ? { ...item, ...data } : item
+            item.id === id ? finalNote : item
         );
-        this.srvStore.setStore(this.notes);
         this.manageComponent();
         return this.notes;
     }
-    deleteNote(id: string) {
-        this.notes = this.notes.filter((item) => item.id !== id);
-        this.srvStore.setStore(this.notes);
+    async deleteNote(id: string) {
+        const finalId = await this.repo.delete(id);
+        this.notes = this.notes.filter((item) => item.id !== finalId);
         this.manageComponent();
         return this.notes;
     }
