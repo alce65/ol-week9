@@ -4,8 +4,10 @@ import { StoreArray } from '../services/storage';
 import { TaskRepo } from './task.repo';
 
 describe('Given a Task Repo', () => {
-    const mockTask = new Task('Test task', 'Test user');
-    const mockData = [mockTask];
+    const mockData = [
+        new Task('Test task 1', 'Test user 1'),
+        new Task('Test task 2', 'Test user 2'),
+    ];
     const repo = new TaskRepo(new StoreArray('Tasks'));
 
     beforeEach(() => {
@@ -28,14 +30,19 @@ describe('Given a Task Repo', () => {
     });
 
     describe('When we use query method', () => {
-        const id = mockTask.id;
+        const id = mockData[0].id;
         test('Then, if the id is VALID, we received the task searched in the repo', () => {
-            const data = repo.query({ id });
+            const data = repo.queryId(id);
             expect(StoreArray.prototype.getStore).toHaveBeenCalled();
             expect(data).toEqual(mockData[0]);
         });
+        test('Then, if there are NOT id, we received a null', () => {
+            const data = repo.queryId('');
+            expect(StoreArray.prototype.getStore).not.toHaveBeenCalled();
+            expect(data).toBeNull();
+        });
         test('Then, if the id is NOT VALID, we received a null', () => {
-            const data = repo.query({ id: '23' });
+            const data = repo.queryId('23');
             (StoreArray.prototype.getStore as jest.Mock).mockReturnValueOnce(
                 null
             );
@@ -47,9 +54,6 @@ describe('Given a Task Repo', () => {
     describe('When we use create method', () => {
         test(`Then if the data are VALID, we received the task 
                 created in the repo with its own new id`, () => {
-            (StoreArray.prototype.getStore as jest.Mock).mockReturnValueOnce(
-                mockData
-            );
             const mockNewTaskPayload: Partial<Task> = {
                 title: 'New task',
                 responsible: 'Test user',
@@ -64,17 +68,58 @@ describe('Given a Task Repo', () => {
             );
         });
         test(`Then if the data are NOT VALID, we received a null`, () => {
-            // (StoreArray.prototype.getStore as jest.Mock).mockReturnValueOnce(
-            //     mockData
-            // );
             const data = repo.create({});
             expect(data).toBeNull();
         });
     });
 
-    describe('When', () => {
-        test('Then', () => {
-            //
+    describe('When we use update method', () => {
+        test(`Then if the ID are VALID, we received the task 
+                update in the repo`, () => {
+            const updatePayload: Partial<Task> = {
+                id: mockData[0].id,
+                responsible: 'Ursula',
+            };
+            const data = repo.update(updatePayload);
+            expect(StoreArray.prototype.getStore).toHaveBeenCalled();
+            expect(StoreArray.prototype.setStore).toHaveBeenCalled();
+            expect(data).toHaveProperty(
+                'responsible',
+                updatePayload.responsible
+            );
+        });
+        test(`Then if there are NOT ID, we received a null`, () => {
+            const data = repo.update({});
+            expect(data).toBeNull();
+        });
+        test(`Then if the ID are NOT VALID, we received a null`, () => {
+            const updatePayload: Partial<Task> = {
+                id: 'bad',
+                responsible: 'Ursula',
+            };
+            const data = repo.update(updatePayload);
+            expect(StoreArray.prototype.getStore).toHaveBeenCalled();
+            expect(data).toBeNull();
+        });
+    });
+
+    describe('When we use delete method', () => {
+        test(`Then if the ID are VALID, we received the ID 
+                of the task delete in the repo`, () => {
+            const id = mockData[0].id;
+            const data = repo.delete(id);
+            expect(StoreArray.prototype.getStore).toHaveBeenCalled();
+            expect(StoreArray.prototype.setStore).toHaveBeenCalled();
+            expect(data).toBe(id);
+        });
+        test(`Then if there are NOT ID, we received a null`, () => {
+            const data = repo.delete('');
+            expect(StoreArray.prototype.getStore).not.toHaveBeenCalled();
+            expect(data).toBeNull();
+        });
+        test(`Then if the ID are NOT VALID, we received a null`, () => {
+            const data = repo.delete('bad');
+            expect(data).toBeNull();
         });
     });
 });

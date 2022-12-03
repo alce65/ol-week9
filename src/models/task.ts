@@ -15,7 +15,7 @@ export class Task implements TaskType {
     }
     id: string;
     isCompleted: boolean;
-    constructor(public title: string, public responsible: string) {
+    constructor(public title: string, public responsible: string = '') {
         this.id = Task.generateId();
         this.isCompleted = false;
     }

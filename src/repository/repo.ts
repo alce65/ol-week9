@@ -1,17 +1,27 @@
 export interface Repository<T> {
-    // search: () => Promise<T[]>;
     load: () => Promise<T[]>;
-    query: ({ id }: { id: string }) => Promise<T>;
-    create: (item: T) => Promise<void>;
-    update: (payload: Partial<T>) => Promise<void>;
-    delete: (id: string) => Promise<void>;
+    // como alternativa, load puede denominarse search
+    queryId: (id: string) => Promise<T>;
+    // No se incluye una query potencialmente más genérica query: ({ id }: { id: string }) => Promise<T>;
+    create: (payload: Partial<T>) => Promise<T>;
+    update: (payload: Partial<T>) => Promise<T>;
+    delete: (id: string) => Promise<string>;
 }
 
 export interface SyncRepository<T> {
-    // search: () => T[];
+    // los posibles errores dan una respuesta null, como alternativa a un trow error
     load: () => T[];
-    query: ({ id }: { id: string }) => T | null;
-    create: (item: T) => T | null;
+    queryId: (id: string) => T | null;
+    create: (payload: Partial<T>) => T | null;
     update: (payload: Partial<T>) => T | null;
-    delete: (id: string) => void;
+    delete: (id: string) => string | null;
+}
+
+export interface SyncRepositoryWithErrors<T> {
+    // los posibles errores dan una respuesta null, como alternativa a un trow error
+    load: () => T[];
+    queryId: (id: string) => T;
+    create: (payload: Partial<T>) => T;
+    update: (payload: Partial<T>) => T;
+    delete: (id: string) => string;
 }
