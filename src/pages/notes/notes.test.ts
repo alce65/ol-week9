@@ -4,12 +4,12 @@ import '@testing-library/jest-dom';
 import { NotesPage } from './notes';
 import * as debug from '../../tools/debug.js';
 import { List } from '../../components/notes/list/list.js';
-import { NotesRepo } from '../../repository/notes.repo';
+
+jest.mock('../../components/notes/list/list.js');
 
 describe('Given "NotesPage" component', () => {
     document.body.innerHTML = `<slot name="page"></slot>`;
     describe('When it is instantiated with a valid selector', () => {
-        NotesRepo.prototype.load = jest.fn().mockResolvedValue([]);
         const todoPage = new NotesPage('slot[name="page"]');
 
         const elements = [
@@ -17,6 +17,7 @@ describe('Given "NotesPage" component', () => {
         ];
         test('Then we should to be able to instantiate it', () => {
             expect(todoPage).toBeInstanceOf(NotesPage);
+            expect(List).toHaveBeenCalled();
         });
         describe.each(elements)(
             'When it is call with a DOM implementation',
@@ -30,13 +31,13 @@ describe('Given "NotesPage" component', () => {
     });
 
     describe('When the child component has a NON valid selector', () => {
-        List.prototype.render = jest.fn().mockImplementation(() => {
+        (List as jest.Mock).mockImplementation(() => {
             throw new Error('Invalid selector');
         });
         const debugSpy = jest.spyOn(debug, 'consoleDebug');
         const todoPage = new NotesPage('slot[name="page"]');
         expect(todoPage).toBeInstanceOf(NotesPage);
-        expect(List.prototype.render).toBeCalled();
+        expect(List).toBeCalled();
         expect(debugSpy).toBeCalled();
     });
 
