@@ -12,7 +12,7 @@ const square = (a) => console.log(a * a);
 const add = (a, b) => {
     const r = a + b;
     console.log(r);
-    return;
+    return r;
 };
 
 // Promise ES2015 (ES6)
@@ -30,6 +30,7 @@ const add = (a, b) => {
     }
 })();
 
+// El mismo código, si usar async / await
 // const x = 33;
 // makeAfterP()
 //     .then((data) => {

@@ -12,7 +12,7 @@ const square = (a) => console.log(a * a);
 const add = (a, b) => {
     const r = a + b;
     console.log(r);
-    return;
+    return r;
 };
 
 const x = 33;
@@ -28,6 +28,7 @@ makeAfterP()
     });
 console.log('Seguimos');
 
+// Métodos estáticos de la función/clase Promise
 // Promise.all();
 // Promise.allSettled();
 // Promise.race();
