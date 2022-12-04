@@ -1,18 +1,23 @@
 import { Note } from '../models/note';
+import { Repository } from './repo';
 
-export class NotesRepo {
-    url = 'http://localhost:3300/notes/';
+const invalidIdError = new Error('Invalid ID');
 
-    load() {
-        // : Promise<Note[]>
+export class NotesRepo implements Repository<Note> {
+    constructor(private url = 'http://localhost:3300/notes/') {
+        //
+    }
+
+    load(): Promise<Note[]> {
         return fetch(this.url).then((resp) => {
             if (!resp.ok)
                 throw new Error(`Error ${resp.status}: ${resp.statusText}`);
             return resp.json();
         });
     }
-    query(id: string) {
-        // : Promise<Note[]>
+    queryId(id: string): Promise<Note> {
+        if (!id || typeof id !== 'string')
+            return Promise.reject(invalidIdError);
         return fetch(this.url + id).then((resp) => {
             if (!resp.ok)
                 throw new Error(`Error ${resp.status}: ${resp.statusText}`);
@@ -20,7 +25,7 @@ export class NotesRepo {
         });
     }
 
-    create(payload: Partial<Note>) {
+    create(payload: Partial<Note>): Promise<Note> {
         return fetch(this.url, {
             method: 'POST',
             body: JSON.stringify(payload),
@@ -34,7 +39,7 @@ export class NotesRepo {
         });
     }
     update(payload: Partial<Note>) {
-        if (!payload.id) throw new Error('Invalid ID');
+        if (!payload.id) return Promise.reject(invalidIdError);
         return fetch(this.url + payload.id, {
             method: 'PATCH',
             body: JSON.stringify(payload),
@@ -47,8 +52,8 @@ export class NotesRepo {
             return resp.json();
         });
     }
-    delete(id: string) {
-        if (!id) throw new Error('Invalid ID');
+    delete(id: string): Promise<string> {
+        if (!id) return Promise.reject(invalidIdError);
         return fetch(this.url + id, {
             method: 'DELETE',
         }).then((resp) => {

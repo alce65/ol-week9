@@ -1,7 +1,5 @@
-import { initializeNotes } from '../../../mocks/notes.js';
 import { Note } from '../../../models/note.js';
 import { NotesRepo } from '../../../repository/notes.repo.js';
-import { StoreArray } from '../../../services/storage.js';
 import { consoleDebug } from '../../../tools/debug.js';
 import { Component } from '../../component/component.js';
 import { Add } from '../add/add.js';

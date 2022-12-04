@@ -15,7 +15,7 @@ export class Note implements NoteType {
     }
     id: string;
     isImportant: boolean;
-    constructor(public title: string, public author: string) {
+    constructor(public title: string, public author: string = '') {
         this.id = Note.generateId();
         this.isImportant = false;
     }

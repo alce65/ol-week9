@@ -4,11 +4,14 @@ import '@testing-library/jest-dom';
 import { NotesPage } from './notes';
 import * as debug from '../../tools/debug.js';
 import { List } from '../../components/notes/list/list.js';
+import { NotesRepo } from '../../repository/notes.repo';
 
 describe('Given "NotesPage" component', () => {
     document.body.innerHTML = `<slot name="page"></slot>`;
     describe('When it is instantiated with a valid selector', () => {
+        NotesRepo.prototype.load = jest.fn().mockResolvedValue([]);
         const todoPage = new NotesPage('slot[name="page"]');
+
         const elements = [
             screen.getByRole('heading', { name: 'Notas' }), // <h2>
         ];
