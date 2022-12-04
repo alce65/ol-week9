@@ -68,6 +68,7 @@ describe('Given "List" component', () => {
             list = new List('slot');
             initialNotes = mockData;
         });
+
         test('Then if it is call addNote() the notes array should be returned with a new item', async () => {
             NotesRepo.prototype.create = jest.fn().mockResolvedValue(mockNote);
             await list.addNote(mockNote);

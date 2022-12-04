@@ -20,16 +20,15 @@ export class List extends Component {
         this.template = this.createTemplate();
         this.render();
         try {
+            this.notes.forEach((item) => {
+                new Item(
+                    'ul.slot-items',
+                    item,
+                    this.updateNote.bind(this),
+                    this.deleteNote.bind(this)
+                );
+            });
             new Add('section.notes', this.addNote.bind(this));
-            this.notes.forEach(
-                (item) =>
-                    new Item(
-                        'ul.slot-items',
-                        item,
-                        this.updateNote.bind(this),
-                        this.deleteNote.bind(this)
-                    )
-            );
         } catch (error) {
             consoleDebug((error as Error).message);
         }
